@@ -36,6 +36,11 @@ function emailExists($email, $dbh) {
 
 
 
+function getSha1Password() {
+	return (sha1(PASSWORD_KEY.$s));
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] != "POST") {
 	// 投稿前
 
@@ -78,7 +83,21 @@ if ($_SERVER['REQUEST_METHOD'] != "POST") {
 		$error['password'] = 'パスワードを入力してください';
 	}
 
+	// 登録処理
 	if (empty($error)) {
+		$sql = "insert into users
+				(name, email, password, created, modified)
+				values
+				(:name, :email, :password, now(), now())";
+		$stmt = $dbh->prepare($sql);
+		$params = array(
+			":name" => $name,
+			":email" => $email,
+			":password" => getSha1Password($password)
+		);
+		$stmt->execute($params);
+		header('Location: '.SITE_URL.'login.php');
+		exit;
 	}
 }
 
@@ -95,8 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] != "POST") {
 		<h1>新規ユーザー登録</h1>
 		<form action="" method="POST">
 			<p>お名前：<input type="text" name="name" value="<?php echo h($name); ?>"> <?php echo h($error['name']); ?></p>
-			<p>メールアドレス：<input type="text" name="email" value="<?php echo h($email); ?>">"> <?php echo h($error['email']); ?></p>
-			<p>パスワード：<input type="password" name="password" value="">"> <?php echo h($error['password']); ?></p>
+			<p>メールアドレス：<input type="text" name="email" value="<?php echo h($email); ?>"> <?php echo h($error['email']); ?></p>
+			<p>パスワード：<input type="password" name="password" value=""> <?php echo h($error['password']); ?></p>
 			<p><input type="hidden" name="token" value="<?php echo h($_SESSION['token']); ?>"></p>
 			<p><input type="submit" value="新規登録！"> <a href="index.php">戻る</a></p>
 		</form>
