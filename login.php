@@ -6,7 +6,7 @@ require_once('functions.php');
 session_start();
 
 if (!empty($_SESSION['me'])) {
-	header('Location:'.SITE_URL)
+	header('Location:'.SITE_URL);
 }
 
 ?>
@@ -22,7 +22,7 @@ if (!empty($_SESSION['me'])) {
 		<form action="" method="POST">
 			<p>メールアドレス：<input type="text" name="email" value=""></p>
 			<p>パスワード：<input type="password" name="password" value=""></p>
-			<p><input type="subumit" value="ログイン"> <a href="signup.php">新規登録はこちら！</a></p>
+			<p><input type="submit" value="ログイン！"> <a href="signup.php">新規登録はこちら！</a></p>
 		</form>
 	</body>
 </html>
