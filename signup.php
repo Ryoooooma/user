@@ -6,41 +6,6 @@ require_once('config.php');
 require_once('functions.php');
 
 
-
-function setToken() {
-	if (!isset($_SESSION['token'])) {
-		$_SESSION['token'] = sha1(uniqid(mt_rand(), true));
-	}
-}
-
-
-
-function checkToken() {
-	if (empty($_POST['token']) || $_POST['token'] !== h($_SESSION['token'])) {
-		echo "不正な処理です！";
-		// var_dump($_SESSION['token']);
-		// var_dump($_POST['token']);
-		exit;
-	}
-}
-
-
-
-function emailExists($email, $dbh) {
-	$sql = "select * from users where email = :email limit 1";
-	$stmt = $dbh->prepare($sql);
-	$stmt->execute(array(":email" => $email));
-	$user = $stmt->fetch();
-	return $user ? true : false;
-}
-
-
-
-function getSha1Password() {
-	return (sha1(PASSWORD_KEY.$s));
-}
-
-
 if ($_SERVER['REQUEST_METHOD'] != "POST") {
 	// 投稿前
 
