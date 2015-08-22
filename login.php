@@ -62,9 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] != "POST") {
 	}
 
 	if (empty($error)) {
-		// セッションハイジャック
+		// セッションハイジャック対策...これやると一旦動かないから置いておく。
+		// session_regenerate_id(true);
 		$_SESSION['me'] = $me;
-		header('Location: '.SITE_URL.'/index.php');
+		header('Location: '.SITE_URL);
 		exit;
 	}
 }
